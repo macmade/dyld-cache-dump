@@ -16,6 +16,12 @@ A macOS command-line tool to dump the contents of dyld shared cache files.
 Usage: dyld-cache-dump SOURCE DESTINATION
 ```
 
+### Installation
+
+```
+brew install --HEAD macmade/tap/dyld-cache-dump
+```
+
 License
 -------
 
