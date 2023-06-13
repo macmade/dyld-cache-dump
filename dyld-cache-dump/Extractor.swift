@@ -75,6 +75,37 @@ public class Extractor
         {
             progress?( $0 + 1, $1 )
         }
+
+        self.setFilesAsExecutable( in: destination )
+    }
+
+    private func setFilesAsExecutable( in directory: URL )
+    {
+        guard let enumerator = FileManager.default.enumerator( at: directory, includingPropertiesForKeys: nil )
+        else
+        {
+            return
+        }
+
+        enumerator.forEach
+        {
+            guard let file = $0 as? URL
+            else
+            {
+                return
+            }
+
+            var isDir: ObjCBool = false
+
+            if FileManager.default.fileExists( atPath: file.path( percentEncoded: false ), isDirectory: &isDir ), isDir.boolValue == false
+            {
+                let attributes: [ FileAttributeKey: Any ] = [
+                    .posixPermissions: 0o755
+                ]
+
+                try? FileManager.default.setAttributes( attributes, ofItemAtPath: file.path( percentEncoded: false ) )
+            }
+        }
     }
 
     private func recylce( url: URL ) throws
